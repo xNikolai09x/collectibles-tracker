@@ -3,191 +3,475 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tarkov Item Tracker</title>
+<title>Items Index</title>
 <style>
-  /* Add your custom CSS styles here */
-  body {
-    background-image: url('eft.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url('eft.png');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
 
-  .container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: rgba(169, 169, 169, 0.8); /* Darker grey background with slight transparency */
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    position: relative;
-  }
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: rgba(169, 169, 169, 0.8); /* Darker grey background with slight transparency */
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: grid;
+        grid-template-columns: auto auto 1fr 1fr 1fr auto auto; /* Updated grid columns */
+        align-items: center;
+        gap: 20px;
+    }
 
-  .item {
-    display: grid;
-    grid-template-columns: 120px 200px 60px 200px repeat(3, 1fr);
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
+    .item img {
+        width: 100px;
+        height: 100px;
+    }
 
-  .item img {
-    width: 100px;
-    height: 100px;
-    cursor: pointer;
-  }
+    .item-name {
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-  .count {
-    grid-column: 3;
-  }
+    .count {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
 
-  .reason {
-    grid-column: 4;
-  }
+    .count button {
+        width: 40px;
+        padding: 5px;
+        font-size: 16px;
+    }
 
-  .status {
-    grid-column: 5;
-    display: flex;
-    justify-content: space-around;
-  }
+    .quantity {
+        width: 30px; /* Adjusted width for the quantity input */
+        text-align: center;
+    }
 
-  .credit {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    font-size: 0.8em;
-    color: #000;
-  }
+    .required-quantity {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .quest {
+        font-size: 18px;
+        font-weight: bold;
+        user-select: none; /* Prevent selection/editing */
+    }
+
+    .divider {
+        font-size: 18px;
+    }
+
+    .remove-button {
+        padding: 5px 10px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #ff6347;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+    }
 </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Tarkov Item Tracker</h1>
-    <div id="collectiblesList">
-      <!-- Table headers -->
-      <div class="item" style="font-weight: bold;">
-        <div>Image</div>
-        <div>Name</div>
-        <div>Count</div>
-        <div>Reason</div>
-        <div>Status</div>
-      </div>
+
+<!-- ..............................................................................................1-->
+<div class="container">
+    <img src="Tarkov Icons/Prapor.png" alt="Trader Icon">
+    <img src="Tarkov Icons/60-round-mag-545.png" alt="Item Icon">
+    <div class="item-name">60 Round 5.45 Magazine</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">3</div>
+        <button onclick="adjustCount(this, -1)">-</button>
     </div>
+    <div class="quest">Ice Cream Cones</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
 
-    <div id="addNewItem">
-      <input type="text" id="newItemName" placeholder="New Item Name">
-      <input type="number" id="newItemCount" placeholder="Count">
-      <input type="text" id="newItemReason" placeholder="Reason">
-      <button onclick="addItem()">Add Item</button>
-      <button onclick="saveData()">Save Data</button>
-      <button onclick="loadData()">Load Data</button>
-      <button onclick="resetPage()">Reset Page</button>
-      <button onclick="saveToFile()">Save to Local File</button>
-      <label for="fileInput">Load from File:</label>
-      <input type="file" id="fileInput" onchange="loadFromFile(event)">
+
+<!-- ..............................................................................................2-->
+<div class="container">
+    <img src="Tarkov Icons/Skier.png" alt="Trader Icon">
+    <img src="Tarkov Icons/secure_flash_drive_sm.png" alt="Item Icon">
+    <div class="item-name">Secure Flash Drive</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">5</div>
+        <button onclick="adjustCount(this, -1)">-</button>
     </div>
-    <div class="credit">By xNikolai09x aka Honor_Knees</div>
-  </div>
+    <div class="quest">(2) Whats on the Flashdrive Quest + (3) Shady Business</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
 
-  <script>
-    // Load initial data on page load
-    window.onload = function() {
-      loadData();
-    };
 
+<!-- ..............................................................................................3-->
+<div class="container">
+    <img src="Tarkov Icons/Therapist.png" alt="Trader Icon">
+    <img src="Tarkov Icons/Salewa_FIRST_AID_KIT_sm.png" alt="Item Icon">
+    <div class="item-name">Salewa</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">3</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Shortage</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+
+<!-- ..............................................................................................4-->
+<div class="container">
+    <img src="Tarkov Icons/Therapist.png" alt="Trader Icon">
+    <img src="Tarkov Icons/Gas_analyzer_sm.png" alt="Item Icon">
+    <div class="item-name">Gas Analyzer</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div>
+        <div class="required-quantity">3</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Sanitary Standards 1&2</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................5-->
+<div class="container">
+    <img src="Tarkov Icons/Therapist.png" alt="Trader Icon">
+    <img src="Tarkov Icons/Morphine.png" alt="Item Icon">
+    <div class="item-name">Morphine</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">4</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Pain Killer</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................6-->
+<div class="container">
+    <img src="Tarkov Icons/Therapist.png" alt="Trader Icon">
+    <img src="Tarkov Icons/tushonka-s.png" alt="Item Icon">
+    <div class="item-name">Tushonka (Small)</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">15</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">General Wares</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................7-->
+<div class="container">
+    <img src="Tarkov Icons/Therapist.png" alt="Trader Icon">
+    <img src="Tarkov Icons/car-battery.png" alt="Item Icon">
+    <div class="item-name">Car Battery</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">4</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Car Repair</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................8-->
+<div class="container">
+    <img src="Tarkov Icons/Therapist.png" alt="Trader Icon">
+    <img src="Tarkov Icons/Spark_plug_sm.png" alt="Item Icon">
+    <div class="item-name">Spark Plug</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">8</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Car Repair</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................9-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/Powercord.png" alt="Item Icon">
+    <div class="item-name">Power Cord</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">2</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Farming - Part 2</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................10-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/T-Plug.png" alt="Item Icon">
+    <div class="item-name">T Plug</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">4</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Farming - Part 2</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................11-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/pcb.png" alt="Item Icon">
+    <div class="item-name">Printed Circuit Board</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">2</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Farming - Part 2</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................12-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/gpu.png" alt="Item Icon">
+    <div class="item-name">Graphics Card</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">3</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Farming - Part 4</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................13-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/CPU-Fan.png" alt="Item Icon">
+    <div class="item-name">CPU Fan</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> 
+        <div class="required-quantity">15</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Farming - Part 4</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................14-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/CPU.png" alt="Item Icon">
+    <div class="item-name">PC CPU</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> <!-- Divider between quantity input and "4" -->
+        <div class="required-quantity">3</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Signal Pt.2</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................15-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/Rechargeable-battery.png" alt="Item Icon">
+    <div class="item-name">Rechargeable Battery</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> <!-- Divider between quantity input and "4" -->
+        <div class="required-quantity">3</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Signal Pt.2</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................16-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/pcb.png" alt="Item Icon">
+    <div class="item-name">Printed Circuit Board</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> <!-- Divider between quantity input and "4" -->
+        <div class="required-quantity">3</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Signal Pt.2</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................17-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/gphone.png" alt="Item Icon">
+    <div class="item-name">Broken GPhone</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> <!-- Divider between quantity input and "4" -->
+        <div class="required-quantity">3</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Signal Pt.2</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................18-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/Malboro.png" alt="Item Icon">
+    <div class="item-name">Malboro Cigarettes</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> <!-- Divider between quantity input and "4" -->
+        <div class="required-quantity">5</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Bad Habbit</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................19-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/Wilston.png" alt="Item Icon">
+    <div class="item-name">Wilston Cigarettes</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> <!-- Divider between quantity input and "4" -->
+        <div class="required-quantity">5</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Bad Habbit</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................20-->
+<div class="container">
+    <img src="Tarkov Icons/Mechanic.png" alt="Trader Icon">
+    <img src="Tarkov Icons/Strike_Cigarettes_sm.png" alt="Item Icon">
+    <div class="item-name">Strike Cigarettes</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> <!-- Divider between quantity input and "4" -->
+        <div class="required-quantity">5</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Bad Habbit</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................21-->
+<div class="container">
+    <img src="Tarkov Icons/Jaeger.png" alt="Trader Icon">
+    <img src="Tarkov Icons/iskra.png" alt="Item Icon">
+    <div class="item-name">Iskra</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> <!-- Divider between quantity input and "4" -->
+        <div class="required-quantity">3</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Acquaintance</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................22-->
+<div class="container">
+    <img src="Tarkov Icons/Jaeger.png" alt="Trader Icon">
+    <img src="Tarkov Icons/noodles.png" alt="Item Icon">
+    <div class="item-name">Noodles</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> <!-- Divider between quantity input and "4" -->
+        <div class="required-quantity">2</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Acquaintance</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+<!-- ..............................................................................................23-->
+<div class="container">
+    <img src="Tarkov Icons/Jaeger.png" alt="Trader Icon">
+    <img src="Tarkov Icons/Tushonka-l.png" alt="Item Icon">
+    <div class="item-name">Tushonka (Large)</div>
+    <div class="count">
+        <button onclick="adjustCount(this, 1)">+</button>
+        <input type="text" class="quantity" value="0" readonly>
+        <div class="divider">/</div> <!-- Divider between quantity input and "4" -->
+        <div class="required-quantity">2</div>
+        <button onclick="adjustCount(this, -1)">-</button>
+    </div>
+    <div class="quest">Acquaintance</div>
+    <button class="remove-button" onclick="removeItem(this)">Remove</button>
+</div>
+
+
+<script>
     // Function to adjust item count
-    function adjustCount(itemElement, change) {
-      const countElement = itemElement.parentElement.querySelector('.count span');
-      let count = parseInt(countElement.innerText);
-      count += change;
-      countElement.innerText = count;
-      saveData(); // Save data after count adjustment
+    function adjustCount(button, change) {
+        const quantityInput = button.parentElement.querySelector('.quantity');
+        let count = parseInt(quantityInput.value);
+        count += change;
+        if (count >= 0) {
+            quantityInput.value = count;
+        }
     }
 
-    // Function to add a new item
-    function addItem() {
-      const newName = document.getElementById('newItemName').value;
-      const newCount = document.getElementById('newItemCount').value;
-      const newReason = document.getElementById('newItemReason').value;
-
-      const newItemHtml = `
-        <div class="item">
-          <img src="placeholder.jpg" alt="${newName}" onclick="updateImage(this)">
-          <div>${newName}</div>
-          <div class="count">
-            <button onclick="adjustCount(this, -1)">-</button>
-            <span>${newCount}</span>
-            <button onclick="adjustCount(this, 1)">+</button>
-          </div>
-          <div class="reason">${newReason}</div>
-          <div class="status">
-            <input type="checkbox" value="notStarted"> Not Started
-            <input type="checkbox" value="started"> Started
-            <input type="checkbox" value="finished"> Finished
-          </div>
-        </div>
-      `;
-      document.getElementById('collectiblesList').insertAdjacentHTML('beforeend', newItemHtml);
-      saveData(); // Save data after adding a new item
+    // Function to remove the item from the list
+    function removeItem(button) {
+        const itemContainer = button.parentElement;
+        itemContainer.remove();
     }
+</script>
 
-    // Function to save data to localStorage
-    function saveData() {
-      const collectiblesListHtml = document.getElementById('collectiblesList').innerHTML;
-      localStorage.setItem('collectiblesData', collectiblesListHtml);
-    }
-
-    // Function to load data from localStorage
-    function loadData() {
-      const collectiblesListHtml = localStorage.getItem('collectiblesData');
-      if (collectiblesListHtml) {
-        document.getElementById('collectiblesList').innerHTML = collectiblesListHtml;
-      }
-    }
-
-    // Function to reset the page
-    function resetPage() {
-      localStorage.removeItem('collectiblesData');
-      location.reload(); // Reload the page to reset
-    }
-
-    // Function to load data from a file
-    function loadFromFile(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-        const contents = e.target.result;
-        document.getElementById('collectiblesList').innerHTML = contents;
-        saveData(); // Save loaded data to localStorage
-      };
-
-      reader.readAsText(file);
-    }
-
-    // Function to save data to a local file
-    function saveToFile() {
-      const data = localStorage.getItem('collectiblesData');
-      const blob = new Blob([data], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'collectibles.txt';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    // Function to update image URL
-    function updateImage(image) {
-      const newImageUrl = prompt('Enter the new image URL:', image.src);
-      if (newImageUrl) {
-        image.src = newImageUrl;
-        saveData(); // Save data after updating image
-      }
-    }
-  </script>
 </body>
 </html>
